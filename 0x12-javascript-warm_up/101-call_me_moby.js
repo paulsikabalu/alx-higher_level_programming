@@ -1,11 +1,8 @@
-// 101-call_me_moby.js
+#!/usr/bin/node
+// executes x times a function.
 
-function callMeMoby(x, theFunction) {
-    if (x > 0) {
+exports.callMeMoby = function (x, theFunction) {
+    for (let i = 0; i < x; i++) {
       theFunction();
-      callMeMoby(x - 1, theFunction);
     }
-  }
-  
-  module.exports.callMeMoby = callMeMoby;
-  
+  };

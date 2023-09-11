@@ -1,18 +1,12 @@
 #!/usr/bin/node
+// computes and prints a factorial
 
-function factorial(n) {
-    if (isNaN(n) || n < 0) {
-      return 1; // Factorial of NaN or negative number is 1
-    }
-    if (n === 0) {
-      return 1; // Factorial of 0 is 1
+function factorial (n) {
+    if ((isNaN(n)) || (n === 1)) {
+      return 1;
     } else {
-      return n * factorial(n - 1); // Recursive call to compute factorial
+      return n * factorial(n - 1);
     }
   }
   
-  const input = parseInt(process.argv[2]); // Get the integer argument from command line
-  
-  const result = factorial(input);
-  console.log(`Factorial of ${input} is: ${result}`);
-  
+  console.log(factorial(parseInt(process.argv[2])));

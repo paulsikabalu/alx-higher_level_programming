@@ -1,9 +1,8 @@
 #!/usr/bin/node
+// prints the first argument passed to it
 
-const firstArg = process.argv[2]; // Access the first command-line argument
-
-if (firstArg !== undefined) {
-  console.log(firstArg);
-} else {
-  console.log("No argument");
-}
+if (process.argv[2] === undefined) {
+    console.log('No argument');
+  } else {
+    console.log(process.argv[2]);
+  }

@@ -1,16 +1,8 @@
 #!/usr/bin/node
+// prints the addition of 2 integers
 
-function add(a, b) {
-    return a + b;
+function add (a, b) {
+    return parseInt(a) + parseInt(b);
   }
   
-  const arg1 = parseInt(process.argv[2]); // Get the first integer argument
-  const arg2 = parseInt(process.argv[3]); // Get the second integer argument
-  
-  if (!isNaN(arg1) && !isNaN(arg2)) {
-    const result = add(arg1, arg2);
-    console.log(result);
-  } else {
-    console.log("Please provide two valid integer arguments.");
-  }
-  
+  console.log(add(process.argv[2], process.argv[3]));

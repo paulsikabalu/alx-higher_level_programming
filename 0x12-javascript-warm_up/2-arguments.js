@@ -1,5 +1,10 @@
 #!/usr/bin/node
+// Prints a message depending of the number of arguments passed
 
-console.log("C is fun");
-console.log("Python is cool");
-console.log("JavaScript is amazing");
+if (process.argv.length === 2) {
+    console.log('No argument');
+  } else if (process.argv.length === 3) {
+    console.log('Argument found');
+  } else {
+    console.log('Arguments found');
+  }

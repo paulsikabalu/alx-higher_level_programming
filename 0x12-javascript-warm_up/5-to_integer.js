@@ -1,9 +1,8 @@
 #!/usr/bin/node
-const arg1 = process.argv[2]; // Access the first command-line argument
-const arg2 = process.argv[3]; // Access the second command-line argument
+// prints two arguments passed to it, in the following format: “ is ”
 
-if (arg1 !== undefined && arg2 !== undefined) {
-  console.log(`${arg1} is ${arg2}`);
-} else {
-  console.log("Please provide two arguments.");
-}
+if (isNaN(process.argv[2])) {
+    console.log('Not a number');
+  } else {
+    console.log('My number: ' + parseInt(process.argv[2]));
+  }
