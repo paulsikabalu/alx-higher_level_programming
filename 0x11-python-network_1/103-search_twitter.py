@@ -1,45 +1,50 @@
 #!/usr/bin/python3
-"""Sends a search request to the Twitter API.
+"""Takes in 3 strings and sends a
+search request to the Twitter API.
 
-Display format: [<Tweet ID>] <Tweet text> by <Tweet owner name>
+Display only 5 results in the following format:
 
-Usage: ./103-search_twitter.py <consumer key> <consumer secret> <search string>
-  - Uses the application-only authenitcation flow.
+[<Tweet ID>] <Tweet text> by <Tweet owner name>
 """
-import sys
-import base64
+
+from base64 import b64encode
+from sys import argv
 import requests
 
 
 if __name__ == "__main__":
-    # Get bearer token
-    url = "https://api.twitter.com/oauth2/token"
-    token = "{}:{}".format(sys.argv[1], sys.argv[2]).encode("ascii")
-    token = base64.b64encode(token).decode("utf-8")
-    headers = {
-        "Authorization": "Basic {}".format(token),
-        "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
+    consumer_keys = "{0}:{1}".format(argv[1], argv[2])
+    bearer_token_url = "https://api.twitter.com/oauth2/token"
+    b64_consumer_keys = b64encode(bytes(consumer_keys, encoding='utf-8'))
+    bearer_headers = {
+        'Authorization': "Basic {0}".format(b64_consumer_keys),
+        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
     }
-    payload = {"grant_type": "client_credentials"}
-    r = requests.post(url, headers=headers, data=payload)
-    bearer = r.json().get("access_token")
 
-    # Make search request
-    url = "https://api.twitter.com/1.1/search/tweets.json"
-    headers = {
-        "Authorization": "Bearer {}".format(bearer)
-    }
-    params = {
-        "q": sys.argv[3],
-        "count": "5"
-    }
-    url = "https://api.twitter.com/1.1/search/tweets.json"
-    tweets = requests.get(url, headers=headers, params=params)
+    bearer_res = requests.post(
+        bearer_token_url,
+        auth=(argv[1], argv[2]),
+        data={'grant_type': 'client_credentials'},
+        headers=bearer_headers
+    ).json()
 
-    # Print matched tweets
-    tweets = tweets.json().get("statuses")
-    for t in tweets:
-        tweet_id = t.get("id")
-        tweet_text = t.get("text")
-        tweet_author = t.get("user").get("name")
-        print("[{}] {} by {}".format(tweet_id, tweet_text, tweet_author))
+    if {'token_type', 'access_token'} <= bearer_res.keys():
+        tw_res_url = "https://api.twitter.com/1.1/search/tweets.json"
+        tw_headers = {
+            'Authorization': "Bearer {0}".format(bearer_res['access_token'])
+        }
+        tw_params = {
+            'q': argv[3],
+            'count': '5',
+            'result_type': 'recent'
+        }
+
+        tweets = requests.get(
+            tw_res_url,
+            params=tw_params,
+            headers=tw_headers).json()
+
+        for tweet in tweets['statuses']:
+            print("[{id}] {text} by {owner}".format(
+                id=tweet['id'], text=tweet['text'], owner=tweet['user']['name']
+                ))
